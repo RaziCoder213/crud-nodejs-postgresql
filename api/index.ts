@@ -14,16 +14,25 @@ if (process.env.NODE_ENV === "development") app.use(morgan("dev"));
 app.use(cors({ origin: ["*"], credentials: true }));
 
 // Database connection (only once)
+// Database connection (only once)
 async function initializeDB() {
-  if (!isDbConnected && process.env.DATABASE_URL) {
+  if (!isDbConnected) {
+    // If DATABASE_URL was missing, sequelize might be a dummy instance.
+    // We should check if we really want to proceed.
+    if (!process.env.DATABASE_URL) {
+      console.warn("Skipping DB initialization: DATABASE_URL missing");
+      return;
+    }
+
     try {
       await connectDB();
+      // Only sync if we have a valid postgres connection, otherwise this might throw on the dummy sqlite or if connection failed
       await sequelize.sync({ force: false });
-      console.log("Database connected");
+      console.log("Database connected and synced");
       isDbConnected = true;
     } catch (error) {
       console.error("Database connection error:", error);
-      // Don't throw - let the app continue
+      // Don't throw - let the app continue serving other requests (like health checks)
     }
   }
 }
