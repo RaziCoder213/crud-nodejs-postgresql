@@ -1,7 +1,7 @@
 import { Sequelize, DataTypes } from "sequelize";
 import * as pg from "pg";
 
-const POSTGRES_URL = process.env.DATABASE_URL as unknown as string;
+const POSTGRES_URL = (process.env.DATABASE_POSTGRES_URL || process.env.POSTGRES_URL || process.env.DATABASE_URL) as unknown as string;
 
 // Configure Sequelize with explicit dialect for Vercel deployment
 const sequelizeIsUndefined = !POSTGRES_URL;
@@ -21,10 +21,10 @@ if (sequelizeIsUndefined) {
     dialect: "postgres",
     dialectModule: pg,
     dialectOptions: {
-      ssl: process.env.NODE_ENV === "production" ? {
+      ssl: {
         require: true,
         rejectUnauthorized: false
-      } : false
+      }
     },
     logging: false
   });
