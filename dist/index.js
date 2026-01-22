@@ -18,7 +18,7 @@ if (process.env.NODE_ENV === "development")
 app.use((0, cors_1.default)({ origin: ["*"], credentials: true }));
 // Database connection (only once)
 async function initializeDB() {
-    if (!isDbConnected) {
+    if (!isDbConnected && process.env.DATABASE_URL) {
         try {
             await (0, db_1.connectDB)();
             await db_1.sequelize.sync({ force: false });
@@ -27,12 +27,15 @@ async function initializeDB() {
         }
         catch (error) {
             console.error("Database connection error:", error);
+            // Don't throw - let the app continue
         }
     }
 }
 // Initialize DB on first request
 app.use(async (req, res, next) => {
-    await initializeDB();
+    if (!isDbConnected) {
+        await initializeDB();
+    }
     next();
 });
 // Routes
