@@ -1,0 +1,46 @@
+2026-01-21 18:15:45.989 PKT [91459] LOG:  starting PostgreSQL 14.20 (Homebrew) on x86_64-apple-darwin21.6.0, compiled by Apple clang version 14.0.0 (clang-1400.0.29.202), 64-bit
+2026-01-21 18:15:45.991 PKT [91459] LOG:  listening on IPv6 address "::1", port 5432
+2026-01-21 18:15:45.991 PKT [91459] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2026-01-21 18:15:45.992 PKT [91459] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2026-01-21 18:15:45.995 PKT [91460] LOG:  database system was shut down at 2026-01-21 18:15:38 PKT
+2026-01-21 18:15:46.001 PKT [91459] LOG:  database system is ready to accept connections
+2026-01-21 18:53:51.675 PKT [96378] ERROR:  duplicate key value violates unique constraint "blogs_title_key"
+2026-01-21 18:53:51.675 PKT [96378] DETAIL:  Key (title)=(codingwithrazi@gmail.com) already exists.
+2026-01-21 18:53:51.675 PKT [96378] STATEMENT:  INSERT INTO "blogs" ("id","title","description","published","createdAt","updatedAt") VALUES ($1,$2,$3,$4,$5,$6) RETURNING "id","title","description","category","published","createdAt","updatedAt";
+2026-01-21 18:54:47.599 PKT [96428] ERROR:  duplicate key value violates unique constraint "blogs_title_key"
+2026-01-21 18:54:47.599 PKT [96428] DETAIL:  Key (title)=(codingwithrazi@gmail.com) already exists.
+2026-01-21 18:54:47.599 PKT [96428] STATEMENT:  INSERT INTO "blogs" ("id","title","description","published","createdAt","updatedAt") VALUES ($1,$2,$3,$4,$5,$6) RETURNING "id","title","description","category","published","createdAt","updatedAt";
+2026-01-21 18:54:56.910 PKT [96428] ERROR:  duplicate key value violates unique constraint "blogs_title_key"
+2026-01-21 18:54:56.910 PKT [96428] DETAIL:  Key (title)=(codingwithrazi@gmail.com) already exists.
+2026-01-21 18:54:56.910 PKT [96428] STATEMENT:  INSERT INTO "blogs" ("id","title","description","published","createdAt","updatedAt") VALUES ($1,$2,$3,$4,$5,$6) RETURNING "id","title","description","category","published","createdAt","updatedAt";
+2026-01-21 18:55:05.348 PKT [96428] ERROR:  duplicate key value violates unique constraint "blogs_title_key"
+2026-01-21 18:55:05.348 PKT [96428] DETAIL:  Key (title)=(codingwithdrazi@gmail.com) already exists.
+2026-01-21 18:55:05.348 PKT [96428] STATEMENT:  INSERT INTO "blogs" ("id","title","description","published","createdAt","updatedAt") VALUES ($1,$2,$3,$4,$5,$6) RETURNING "id","title","description","category","published","createdAt","updatedAt";
+2026-01-21 19:09:33.023 PKT [98878] ERROR:  duplicate key value violates unique constraint "blogs_title_key"
+2026-01-21 19:09:33.023 PKT [98878] DETAIL:  Key (title)=(codingwithddrazi@dgmail.com) already exists.
+2026-01-21 19:09:33.023 PKT [98878] STATEMENT:  INSERT INTO "blogs" ("id","title","description","published","createdAt","updatedAt") VALUES ($1,$2,$3,$4,$5,$6) RETURNING "id","title","description","category","published","createdAt","updatedAt";
+2026-01-21 19:12:18.358 PKT [99126] ERROR:  duplicate key value violates unique constraint "blogs_title_key"
+2026-01-21 19:12:18.358 PKT [99126] DETAIL:  Key (title)=(codingwithddrazi@cdgmail.com) already exists.
+2026-01-21 19:12:18.358 PKT [99126] STATEMENT:  INSERT INTO "blogs" ("id","title","description","published","createdAt","updatedAt") VALUES ($1,$2,$3,$4,$5,$6) RETURNING "id","title","description","category","published","createdAt","updatedAt";
+2026-01-21 19:14:28.222 PKT [99324] ERROR:  invalid input syntax for type uuid: "21659dff-2915-457a-ba47-d4064d099899
+	" at character 133
+2026-01-21 19:14:28.222 PKT [99324] STATEMENT:  SELECT "id", "title", "description", "category", "published", "createdAt", "updatedAt" FROM "blogs" AS "blogs" WHERE "blogs"."id" = '21659dff-2915-457a-ba47-d4064d099899
+	';
+2026-01-21 19:15:34.423 PKT [99370] ERROR:  invalid input syntax for type uuid: "
+	" at character 133
+2026-01-21 19:15:34.423 PKT [99370] STATEMENT:  SELECT "id", "title", "description", "category", "published", "createdAt", "updatedAt" FROM "blogs" AS "blogs" WHERE "blogs"."id" = '
+	';
+2026-01-21 19:18:17.753 PKT [99619] ERROR:  invalid input syntax for type uuid: "
+	" at character 133
+2026-01-21 19:18:17.753 PKT [99619] STATEMENT:  SELECT "id", "title", "description", "category", "published", "createdAt", "updatedAt" FROM "blogs" AS "blogs" WHERE "blogs"."id" = '
+	';
+2026-01-21 19:18:24.033 PKT [99619] ERROR:  invalid input syntax for type uuid: "
+	" at character 133
+2026-01-21 19:18:24.033 PKT [99619] STATEMENT:  SELECT "id", "title", "description", "category", "published", "createdAt", "updatedAt" FROM "blogs" AS "blogs" WHERE "blogs"."id" = '
+	';
+2026-01-21 19:20:30.446 PKT [99774] ERROR:  invalid input syntax for type uuid: "21659dff-2915-457a-ba47-d4064d09989" at character 133
+2026-01-21 19:20:30.446 PKT [99774] STATEMENT:  SELECT "id", "title", "description", "category", "published", "createdAt", "updatedAt" FROM "blogs" AS "blogs" WHERE "blogs"."id" = '21659dff-2915-457a-ba47-d4064d09989';
+2026-01-21 19:20:40.461 PKT [99795] ERROR:  invalid input syntax for type uuid: "21659dff-2915-457a-ba47-d4064d09989 " at character 133
+2026-01-21 19:20:40.461 PKT [99795] STATEMENT:  SELECT "id", "title", "description", "category", "published", "createdAt", "updatedAt" FROM "blogs" AS "blogs" WHERE "blogs"."id" = '21659dff-2915-457a-ba47-d4064d09989 ';
+2026-01-21 19:44:18.481 PKT [2409] ERROR:  invalid input syntax for type uuid: "healthchecker" at character 133
+2026-01-21 19:44:18.481 PKT [2409] STATEMENT:  SELECT "id", "title", "description", "category", "published", "createdAt", "updatedAt" FROM "blogs" AS "blogs" WHERE "blogs"."id" = 'healthchecker';
