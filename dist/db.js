@@ -6,7 +6,17 @@ const sequelize_1 = require("sequelize");
 Object.defineProperty(exports, "Sequelize", { enumerable: true, get: function () { return sequelize_1.Sequelize; } });
 Object.defineProperty(exports, "DataTypes", { enumerable: true, get: function () { return sequelize_1.DataTypes; } });
 const POSTGRES_URL = process.env.DATABASE_URL;
-const sequelize = new sequelize_1.Sequelize(POSTGRES_URL);
+// Configure Sequelize with explicit dialect for Vercel deployment
+const sequelize = new sequelize_1.Sequelize(POSTGRES_URL, {
+    dialect: "postgres",
+    dialectOptions: {
+        ssl: process.env.NODE_ENV === "production" ? {
+            require: true,
+            rejectUnauthorized: false
+        } : false
+    },
+    logging: false
+});
 exports.sequelize = sequelize;
 async function connectDB() {
     try {
