@@ -1,61 +1,73 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-require("dotenv/config");
-const express_1 = __importDefault(require("express"));
-const cors_1 = __importDefault(require("cors"));
-const morgan_1 = __importDefault(require("morgan"));
-const db_1 = require("./db");
-const routes_1 = __importDefault(require("./routes/routes"));
-const app = (0, express_1.default)();
+import "dotenv/config";
+import express, { Express, Request, Response } from "express";
+import cors from "cors";
+import morgan from "morgan";
+import { connectDB, sequelize } from "./db";
+import blogRouter from "./routes/routes";
+
+const app: Express = express();
 let isDbConnected = false;
+
 // Middleware setup
-app.use(express_1.default.json({ limit: "10kb" }));
-if (process.env.NODE_ENV === "development")
-    app.use((0, morgan_1.default)("dev"));
-app.use((0, cors_1.default)({ origin: ["*"], credentials: true }));
+app.use(express.json({ limit: "10kb" }));
+if (process.env.NODE_ENV === "development") app.use(morgan("dev"));
+app.use(cors({ origin: ["*"], credentials: true }));
+
+// Database connection (only once)
 // Database connection (only once)
 async function initializeDB() {
-    if (!isDbConnected && process.env.DATABASE_URL) {
-        try {
-            await (0, db_1.connectDB)();
-            await db_1.sequelize.sync({ force: false });
-            console.log("Database connected");
-            isDbConnected = true;
-        }
-        catch (error) {
-            console.error("Database connection error:", error);
-            // Don't throw - let the app continue
-        }
+  if (!isDbConnected) {
+    // If DATABASE_URL was missing, sequelize might be a dummy instance.
+    // We should check if we really want to proceed.
+    if (!process.env.DATABASE_URL) {
+      console.warn("Skipping DB initialization: DATABASE_URL missing");
+      return;
     }
+
+    try {
+      await connectDB();
+      // Only sync if we have a valid postgres connection, otherwise this might throw on the dummy sqlite or if connection failed
+      await sequelize.sync({ force: false });
+      console.log("Database connected and synced");
+      isDbConnected = true;
+    } catch (error) {
+      console.error("Database connection error:", error);
+      // Don't throw - let the app continue serving other requests (like health checks)
+    }
+  }
 }
+
 // Initialize DB on first request
-app.use(async (req, res, next) => {
-    if (!isDbConnected) {
-        await initializeDB();
-    }
-    next();
+app.use(async (req: Request, res: Response, next) => {
+  if (!isDbConnected) {
+    await initializeDB();
+  }
+  next();
 });
+
 // Routes
-app.get("/", (req, res) => {
-    res.send("API is running");
+app.get("/", (req: Request, res: Response) => {
+  res.send("API is running");
 });
-app.get("/api/healthchecker", (req, res) => {
-    res.status(200).json({ status: "success", message: "DONE Bye Uzair" });
+
+app.get("/api/healthchecker", (req: Request, res: Response) => {
+  res.status(200).json({ status: "success", message: "DONE Bye Uzair" });
 });
-app.use("/api/blogs", routes_1.default);
+
+app.use("/api/blogs", blogRouter);
+
 // 404 handler
-app.all("*", (req, res) => {
-    res.status(404).json({ status: "fail", message: `Route: ${req.url} does not exist` });
+app.all("*", (req: Request, res: Response) => {
+  res.status(404).json({ status: "fail", message: `Route: ${req.url} does not exist` });
 });
+
 // For local development
 if (process.env.NODE_ENV === "development") {
-    const PORT = process.env.PORT || 8081;
-    app.listen(PORT, () => {
-        console.log(`Server running on port ${PORT}`);
-    });
+  const PORT = process.env.PORT || 8081;
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
 }
+
 // Export for Vercel
-exports.default = app;
+export default app;
