@@ -1,7 +1,16 @@
 import { Sequelize, DataTypes } from "sequelize";
 import * as pg from "pg";
 
-const POSTGRES_URL = (process.env.DATABASE_POSTGRES_URL || process.env.POSTGRES_URL || process.env.DATABASE_URL) as unknown as string;
+let POSTGRES_URL = (process.env.DATABASE_POSTGRES_URL || process.env.POSTGRES_URL || process.env.DATABASE_URL) as unknown as string;
+if (POSTGRES_URL && POSTGRES_URL.includes("?")) {
+  const [baseUrl, queryString] = POSTGRES_URL.split("?");
+  const params = new URLSearchParams(queryString);
+  // Remove sslmode from URL params so it doesn't override dialectOptions
+  params.delete("sslmode");
+  params.delete("ssl"); // Just in case
+  const newQuery = params.toString();
+  POSTGRES_URL = newQuery ? `${baseUrl}?${newQuery}` : baseUrl;
+}
 
 // Configure Sequelize with explicit dialect for Vercel deployment
 const sequelizeIsUndefined = !POSTGRES_URL;
